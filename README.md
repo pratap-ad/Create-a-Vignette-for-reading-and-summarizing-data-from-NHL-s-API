@@ -3,6 +3,24 @@ Project-1, ST558
 Pratap Adhikari
 9/18/2020
 
+## Project1-ST558
+
+### List of library packages
+
+The list of library packages I have used to run this code in order to
+carry on this project are:
+
+  - knitr  
+  - httr  
+  - jsonlite  
+  - tidyverse  
+  - dplyr  
+  - haven  
+  - ggplot2  
+  - qwraps2  
+  - rmarkdown  
+  - RSQlite
+
 ### Function to get franchiseAPI
 
 ``` r
@@ -85,12 +103,11 @@ if(is.null(tabName) && is.null(modifier) ){
 ### Overview of franchise and location
 
 ``` r
-#teamtotal<- nhl(tabName = "franchise-team-totals") 
+#teamtotal<- nhl(tabName = "franchise-team-totals")$data
 
 #getteams from another endpoint
 
 #division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
-
 #join the two dataset from two different APIs
 
 #newData<- left_join(teamtotal, division, by="teamId")
@@ -98,19 +115,26 @@ if(is.null(tabName) && is.null(modifier) ){
 
 
 # overview of after joining two datasets from two different API endpoints
-#kable(head(newData %>% select(id, franchiseId, teamName, locationName)) , caption= "Franchise ID, Team Name, Location  table for your reference:")
+#kable(newData %>% select(id, franchiseId, teamName, locationName) , caption= "Franchise ID, Team Name, Location  table for your reference:")
 ```
 
 Read table from two different APIs
 
 ``` r
-#dta1<- nhlData("franchise")
-#dta1<- dta1 %>% select(id, mostRecentTeamId, teamCommonName, teamPlaceName) 
-
-#golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId=", ID=15)$data %>% select(activePlayer, firstName, franchiseName, gamesPlayed, lastName, gameTypeId, playerId, ties, wins, losses )
+dta1<- nhlData("franchise")
 ```
 
-## Analysis on team ID=15 (Sallas Stars)
+    ## No encoding supplied: defaulting to UTF-8.
+
+``` r
+dta1<- dta1 %>% select(id, mostRecentTeamId, teamCommonName, teamPlaceName) 
+
+golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId=", ID=15)$data %>% select(activePlayer, firstName, franchiseName, gamesPlayed, lastName, gameTypeId, playerId, ties, wins, losses )
+```
+
+    ## No encoding supplied: defaulting to UTF-8.
+
+### Analysis on team ID=15 (Dallas Stars)
 
 ``` r
 #Create new variable by adding first and last name from two different columns
@@ -122,7 +146,7 @@ golietable15<- golietable15 %>% select(franchiseName, playerName, playerId, acti
 golietable15
 ```
 
-### Active Players
+#### Active Players
 
 Table showing active players from the **Dallas** team
 
@@ -134,7 +158,7 @@ Table showing active players from the **Dallas** team
     ## franchiseName  FALSE TRUE
     ##   Dallas Stars    34    3
 
-### Win/Loss Rate
+#### Win/Loss Rate
 
 ``` r
 #create new variables 
@@ -184,7 +208,7 @@ kable(wlRate)
 
 Numeric Summary
 
-### Sumamry table
+#### Sumamry table
 
 ``` r
 sumry<- function (x, ...){
@@ -367,20 +391,30 @@ Max.
 
 </table>
 
-## Plots
+#### Plots
 
-### Scatter and boxplot
+##### Scatter
+
+The higest win rate is the individuals who have played less games. But
+importently, higher number of games player looks like they are more
+consistent in winnig rate than the lower number of games player.
 
 ``` r
 #scalter plot
 
-plot(golietable15$gamesPlayed, golietable15$wins , 
+plot(golietable15$gamesPlayed, golietable15$wins/golietable15$gamesPlayed , col="blue",
      xlab="Games Played ",
      ylab = "Games won",
-     main = "Games played vs win by individual players")
+     main = "Games played vs win rate")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-60-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+##### Box plot
+
+The players not tagged as active players looks to have loose the higest
+number of games. But in the median number of games lost is higher for
+active players.
 
 ``` r
 #box plot
@@ -388,9 +422,12 @@ bxPlot1<- ggplot(data= golietable15, aes(x=gamesPlayed, y= losses, group=activeP
 bxPlot1 + geom_boxplot() + labs(title="Boxplot of games played and losses by individual players") + geom_jitter(aes(color=activePlayer))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-61-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
-### Bar plots about activeplayers
+##### Bar plots
+
+Again, there are very few, less than 5 players are categorized as active
+player, which seems unreal.
 
 ``` r
 type2<-  golietable15 %>% select(playerName, gamesPlayed, wins, activePlayer, gameTypeId)
@@ -398,9 +435,9 @@ barPlot1<- ggplot(data=type2, aes(x=activePlayer))
 barPlot1 + geom_bar(aes(fill= activePlayer), position = "dodge") + labs(title = "Bar plot about active/inactive players")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
-### Histogram of games Played
+##### Histogram of games Played
 
 The histogram for games played grahp shows that there are very few
 players playing the regular season who are tagged as active player. They
@@ -415,7 +452,9 @@ histogram1 + geom_histogram(binwidth = 1, aes(fill= activePlayer)) + labs(title=
   geom_density(adjust= 0.25, alpha=0.05)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-63-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+Here we can see the active players to have the highest number of wins.
 
 ``` r
 type3<- golietable15 %>% select(wins, losses, activePlayer, gamesPlayed, playerId) #(gameTypeId==3, division.name=="Atlantic") 
@@ -423,13 +462,17 @@ histogram1<- ggplot(data=type3, aes(x=wins))
 histogram1 + geom_histogram(binwidth = 1, aes(y=..density.., fill= activePlayer )) + labs(title="Histogram for wins") +  geom_density(adjust= 0.2, alpha=0.05)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+For the shake of try, the above histograms does not look preety well
+distributed data, so I tried below to see it on win rates, a calculated
+variable. The win rate is left skewed.
 
 ``` r
 hist(wlRate$winRate, probability = T, col = "light blue", xlab = "Win Rate", main = "Histogram of Win Rate (wins/gameplayed)")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ``` r
 #lines(seq(from=0, to=0.7, by = 0.005), dnorm(seq(from=0, to=0.7, by=0.005)), col="Red")

@@ -12,10 +12,6 @@ output:
 
 ```{r setup, include=FALSE, cache=T, message=F, warning=F}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-### List of library packages
-```{r}
 library(knitr)
 library(httr)
 library(jsonlite)
@@ -28,6 +24,24 @@ library(qwraps2)
 library(rmarkdown)
 library(RSQLite)
 ```
+
+## Project1-ST558
+
+### List of library packages  
+The list of library packages I have used to run this code in order to carry on this project are:
+
+* knitr  
+* httr  
+* jsonlite  
+* tidyverse  
+* dplyr  
+* haven  
+* ggplot2  
+* qwraps2  
+* rmarkdown  
+* RSQlite
+
+
 
 ### Function to get franchiseAPI
 ```{r}
@@ -154,10 +168,11 @@ if(is.null(tabName) && is.null(modifier) ){
 
 #newData<- left_join(teamtotal, division, by="teamId")
 #head(newData, n=4)
+```
 
-
+```{r}
 # overview of after joining two datasets from two different API endpoints
-#kable(newData %>% select(id, franchiseId, teamName, locationName) , caption= "Franchise ID, Team Name, Location  table for your reference:")
+kable(newData %>% select(id, franchiseId, teamName, locationName) , caption= "Franchise ID, Team Name, Location  table for your reference:")
 
 ```
 
@@ -172,7 +187,7 @@ golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId="
 ```
 
 
-## Analysis on team ID=15 (Dallas Stars)
+### Analysis on team ID=15 (Dallas Stars)
 ```{r}
 #Create new variable by adding first and last name from two different columns
 
@@ -183,7 +198,7 @@ golietable15<- golietable15 %>% select(franchiseName, playerName, playerId, acti
 golietable15
 ```
 
-### Active Players 
+#### Active Players 
 
 Table showing active players from the **Dallas** team
 
@@ -193,7 +208,7 @@ Table showing active players from the **Dallas** team
 ```
 
 
-### Win/Loss Rate
+#### Win/Loss Rate
 
 ```{r}
 #create new variables 
@@ -206,7 +221,7 @@ kable(wlRate)
 Numeric Summary
 
 
-### Sumamry table
+#### Sumamry table
 
 ```{r}
 sumry<- function (x, ...){
@@ -220,9 +235,14 @@ sumry(2)
 
 ```
 
+Sumamry of number of games played
+```{r}
+gpl<- golietable15 %>% select(gamesPlayed, wins)
+kable (apply(gpl, 2, summary) )
+```
 
-## Plots
-### Scatter 
+#### Plots
+##### Scatter 
 
 The higest win rate is the individuals who have played less games. But importently, higher number of games player looks like they are more consistent in winnig rate than the lower number of games player.
 ```{r}
@@ -235,7 +255,7 @@ plot(golietable15$gamesPlayed, golietable15$wins/golietable15$gamesPlayed , col=
      main = "Games played vs win rate")
 ```
 
-### Box plot
+##### Box plot
 
 The players not tagged as active players looks to have loose the higest number of games. But in the median number of games lost is higher for active players.
 ```{r}
@@ -245,7 +265,7 @@ bxPlot1 + geom_boxplot() + labs(title="Boxplot of games played and losses by ind
 
 ```
 
-### Bar plots 
+##### Bar plots 
 
 Again, there are very few, less than 5 players are categorized as active player, which seems unreal.
 
@@ -256,7 +276,7 @@ barPlot1 + geom_bar(aes(fill= activePlayer), position = "dodge") + labs(title = 
 
 ```
 
-### Histogram of games Played 
+##### Histogram of games Played 
 
 The histogram for games played grahp shows that there are very few players playing the regular season who are tagged as active player. They seem to be played between 40 to 150 games throught their entire career for the data collected period. Also, it shwos there are large group of players who played less than 5 games.
 
@@ -282,7 +302,7 @@ For the shake of try, the above histograms does not look preety well distributed
 ```{r}
 
 hist(wlRate$winRate, probability = T, col = "light blue", xlab = "Win Rate", main = "Histogram of Win Rate (wins/gameplayed)")
-#lines(seq(from=0, to=0.7, by = 0.005), dnorm(seq(from=0, to=0.7, by=0.005)), col="Red")
+
 ```
 
 ```{r}
