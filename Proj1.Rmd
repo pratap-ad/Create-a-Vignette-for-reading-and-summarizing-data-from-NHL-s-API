@@ -5,14 +5,17 @@ date: "9/18/2020"
 output: 
   html_document:
     df_print: paged
-    toc: yes
-    toc_depth: '1'
-    toc_float: true
+    toc: true
+    toc_depth: '5'
+    toc_float: false
 ---
 
 ```{r setup, include=FALSE, cache=T, message=F, warning=F}
 knitr::opts_chunk$set(echo = TRUE)
+```
 
+### List of library packages
+```{r}
 library(knitr)
 library(httr)
 library(jsonlite)
@@ -142,20 +145,19 @@ if(is.null(tabName) && is.null(modifier) ){
 
 ### Overview of franchise and location 
 ```{r}
-teamtotal<- nhl(tabName = "franchise-team-totals") 
+#teamtotal<- nhl(tabName = "franchise-team-totals")$data
 
 #getteams from another endpoint
 
-division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
-
+#division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
 #join the two dataset from two different APIs
 
-newData<- left_join(teamtotal, division, by="teamId")
-head(newData, n=4)
+#newData<- left_join(teamtotal, division, by="teamId")
+#head(newData, n=4)
 
 
 # overview of after joining two datasets from two different API endpoints
-kable(head(newData %>% select(id, franchiseId, teamName, locationName)) , caption= "Franchise ID, Team Name, Location  table for your reference:")
+#kable(newData %>% select(id, franchiseId, teamName, locationName) , caption= "Franchise ID, Team Name, Location  table for your reference:")
 
 ```
 
@@ -230,12 +232,12 @@ The higest win rate is the individuals who have played less games. But importent
 plot(golietable15$gamesPlayed, golietable15$wins/golietable15$gamesPlayed , col="blue",
      xlab="Games Played ",
      ylab = "Games won",
-     main = "Games played vs win rate by individual players")
+     main = "Games played vs win rate")
 ```
 
 ### Box plot
 
-
+The players not tagged as active players looks to have loose the higest number of games. But in the median number of games lost is higher for active players.
 ```{r}
 #box plot
 bxPlot1<- ggplot(data= golietable15, aes(x=gamesPlayed, y= losses, group=activePlayer, color=activePlayer))
@@ -243,8 +245,9 @@ bxPlot1 + geom_boxplot() + labs(title="Boxplot of games played and losses by ind
 
 ```
 
-### Bar plots about activeplayers
+### Bar plots 
 
+Again, there are very few, less than 5 players are categorized as active player, which seems unreal.
 
 ```{r}
 type2<-  golietable15 %>% select(playerName, gamesPlayed, wins, activePlayer, gameTypeId)
