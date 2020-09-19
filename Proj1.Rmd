@@ -10,13 +10,9 @@ output:
     toc_float: false
 ---
 
-
 ```{r setup}
 knitr::opts_chunk$set(echo = TRUE, cache=T, message=F, warning=F)
 ```
-
-
-
 
 ```{r}
 
@@ -52,8 +48,10 @@ The list of library packages I have used to run this code in order to carry on t
 
 
 ### Function to get franchiseAPI
-```{r}
 
+
+```{r}
+#create funciton to read data from records API
 nhl<- function(tabName, ID=NULL, ...){
   base_url<- "https://records.nhl.com/site/api"
   if (!is.null(tabName)){
@@ -93,7 +91,7 @@ return(json_nfl)
 
 ### Function to get statsAPI
 ```{r}
-
+#create funciton to data from statsAPI
 nhl_modifier<- function(modifier, ID=NULL,...){
   stbase_url<- "https://statsapi.web.nhl.com/api/v1/teams"
   if (modifier %in%  c("expand=team.roster", "expand=person.names", "expand=team.schedule.next", "expand=team.schedule.previous",  "expand=team.stats",  "expand=team.roster&season=20142015", "teamId=4,5,29",  "stats=statsSingleSeasonPlayoffs"))
@@ -103,7 +101,7 @@ st_txt<- content(get_st, "text")
 json_st<- fromJSON(st_txt, flatten=T)
 
 }
-else {
+else { #return a message if the modifier is not campatible with the function
   json_st="Sorry, can't accept this modifier"
   
 }
@@ -203,7 +201,7 @@ golietable15$playerName<- c(paste0(golietable15$firstName, " ", golietable15$las
 
 #select only the varaibles required to analyse the data
 golietable15<- golietable15 %>% select(franchiseName, playerName, playerId, activePlayer, gameTypeId, gamesPlayed, mostGoalsAgainstOneGame, ties, wins, losses)
-golietable15
+
 ```
 
 #### Categorical Summary 
@@ -337,8 +335,8 @@ ggplot (wlRate, aes(x=winRate, ..density..)) + geom_histogram(bins=20) + facet_w
 ```
 
 ```{r, echo=F}
-#render("Proj1.Rmd", output_file= I("README.md") )
- #rmarkdown ::github_document
+render("Proj1.Rmd", output_file= I("README.md") )
+rmarkdown ::github_document
 
 
 ```
