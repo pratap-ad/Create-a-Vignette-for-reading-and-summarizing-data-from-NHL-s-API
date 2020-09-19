@@ -142,35 +142,35 @@ if(is.null(tabName) && is.null(modifier) ){
 
 ### Overview of franchise and location 
 ```{r}
-#teamtotal<- nhl(tabName = "franchise-team-totals") 
+teamtotal<- nhl(tabName = "franchise-team-totals") 
 
 #getteams from another endpoint
 
-#division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
+division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
 
 #join the two dataset from two different APIs
 
-#newData<- left_join(teamtotal, division, by="teamId")
-#head(newData, n=4)
+newData<- left_join(teamtotal, division, by="teamId")
+head(newData, n=4)
 
 
 # overview of after joining two datasets from two different API endpoints
-#kable(head(newData %>% select(id, franchiseId, teamName, locationName)) , caption= "Franchise ID, Team Name, Location  table for your reference:")
+kable(head(newData %>% select(id, franchiseId, teamName, locationName)) , caption= "Franchise ID, Team Name, Location  table for your reference:")
 
 ```
 
 
 Read table from two different APIs
 ```{r}
-#dta1<- nhlData("franchise")
-#dta1<- dta1 %>% select(id, mostRecentTeamId, teamCommonName, teamPlaceName) 
+dta1<- nhlData("franchise")
+dta1<- dta1 %>% select(id, mostRecentTeamId, teamCommonName, teamPlaceName) 
 
-#golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId=", ID=15)$data %>% select(activePlayer, firstName, franchiseName, gamesPlayed, lastName, gameTypeId, playerId, ties, wins, losses )
+golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId=", ID=15)$data %>% select(activePlayer, firstName, franchiseName, gamesPlayed, lastName, gameTypeId, playerId, ties, wins, losses )
 
 ```
 
 
-## Analysis on team ID=15 (Sallas Stars)
+## Analysis on team ID=15 (Dallas Stars)
 ```{r}
 #Create new variable by adding first and last name from two different columns
 
@@ -220,17 +220,20 @@ sumry(2)
 
 
 ## Plots
-### Scatter and boxplot
+### Scatter 
 
+The higest win rate is the individuals who have played less games. But importently, higher number of games player looks like they are more consistent in winnig rate than the lower number of games player.
 ```{r}
 
 #scalter plot
 
-plot(golietable15$gamesPlayed, golietable15$wins , 
+plot(golietable15$gamesPlayed, golietable15$wins/golietable15$gamesPlayed , col="blue",
      xlab="Games Played ",
      ylab = "Games won",
-     main = "Games played vs win by individual players")
+     main = "Games played vs win rate by individual players")
 ```
+
+### Box plot
 
 
 ```{r}
@@ -262,7 +265,7 @@ histogram1 + geom_histogram(binwidth = 1, aes(fill= activePlayer)) + labs(title=
 
 ```
 
-
+Here we can see the active players to have the highest number of wins.
 
 ```{r}
 type3<- golietable15 %>% select(wins, losses, activePlayer, gamesPlayed, playerId) #(gameTypeId==3, division.name=="Atlantic") 
@@ -271,7 +274,7 @@ histogram1 + geom_histogram(binwidth = 1, aes(y=..density.., fill= activePlayer 
 
 ```
 
-
+For the shake of try, the above histograms does not look preety well distributed data, so I tried below to see it on win rates, a calculated variable. The win rate is left skewed.
 
 ```{r}
 
@@ -280,7 +283,7 @@ hist(wlRate$winRate, probability = T, col = "light blue", xlab = "Win Rate", mai
 ```
 
 ```{r}
-#render("Proj1.Rmd", output_format= "github_document", output_file= I("README.md") )
+render("Proj1.Rmd", output_format= "github_document", output_file= I("README.md") )
 
 ```
 
