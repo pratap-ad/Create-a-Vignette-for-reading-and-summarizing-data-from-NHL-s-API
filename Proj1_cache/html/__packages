@@ -1,0 +1,17 @@
+base
+knitr
+httr
+jsonlite
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+haven
+rmarkdown
+qwraps2
+RSQLite
