@@ -311,7 +311,7 @@ golietable15<- golietable15 %>% select(franchiseName, playerName, playerId, acti
 ```
 
 #### Categorical Summary
-
+#### Contingency table
 Table showing active players from the **Dallas** team
 
 ``` r
@@ -322,7 +322,7 @@ Table showing active players from the **Dallas** team
     ## franchiseName  FALSE TRUE
     ##   Dallas Stars    34    3
 
-#### Contingency table
+
 
 ``` r
 # Max goals against one game
