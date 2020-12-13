@@ -3,14 +3,14 @@ title: "Project-1, ST558"
 author: "Pratap Adhikari"
 date: "9/18/2020"
 output:
-  html_document:
-    toc: yes
-    toc_depth: 5
   pdf_document:
     toc: yes
     toc_depth: '5'
   rmarkdown::github_document:
     toc: yes
+  html_document:
+    toc: yes
+    toc_depth: 5
 always_allow_html: yes
 ---
 
@@ -27,9 +27,13 @@ library(rmarkdown)
 library(RSQLite)
 ```
 
+\newpage
+
 ## Project1-ST558
 
 This project work involves creating a `vignette` for reading and summarizing data from the *National Hockey League's* (NHL) **API**.
+
+
 
 
 ### List of library packages  
