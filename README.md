@@ -33,7 +33,7 @@ carry on this project are:
 #### To install the packages:
 
 install.packages(“knitr”, “httr”, “jsonlite”, “tidyverse”, “dplyr”,
-“haven”, “ggplot2”, “qwraps2”, “rmarkdown”, “RSAlite”)
+“haven”, “ggplot2”, “qwraps2”, “rmarkdown”, “RSQlite”)
 
 ### Function to get franchiseAPI
 
@@ -76,7 +76,6 @@ nhl_modifier<- function(modifier, ID=NULL,...){
     get_st<- GET(paste0(stbase_url, "?", modifier))
 st_txt<- content(get_st, "text")
 json_st<- fromJSON(st_txt, flatten=T)
-
 }
 else { #return a message if the modifier is not campatible with the function
   json_st="Sorry, can't accept this modifier"
@@ -126,10 +125,8 @@ teamtotal<- nhl(tabName = "franchise-team-totals")$data
 
 ``` r
 #getteams from another endpoint
-
 division<- nhl_modifier(modifier = "expand=team.roster")$teams %>% select(id, division.name,  locationName, division.nameShort, conference.name) %>% rename(teamId=id)
 #join the two dataset from two different APIs
-
 newData<- left_join(teamtotal, division, by="teamId")
 head(newData, n=4)
 ```
@@ -290,7 +287,6 @@ dta1<- nhlData("franchise")
 
 ``` r
 dta1<- dta1 %>% select(id, mostRecentTeamId, teamCommonName, teamPlaceName) 
-
 golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId=", ID=15)$data %>% select(activePlayer, firstName, franchiseName, gamesPlayed, lastName, gameTypeId, playerId, mostGoalsAgainstOneGame, ties, wins, losses )
 ```
 
@@ -300,9 +296,7 @@ golietable15<- nhl(tabName  = "franchise-goalie-records?cayenneExp=franchiseId="
 
 ``` r
 #Create new variable by adding first and last name from two different columns
-
 golietable15$playerName<- c(paste0(golietable15$firstName, " ", golietable15$lastName))
-
 #select only the varaibles required to analyse the data
 golietable15<- golietable15 %>% select(franchiseName, playerName, playerId, activePlayer, gameTypeId, gamesPlayed, mostGoalsAgainstOneGame, ties, wins, losses)
 ```
@@ -4292,7 +4286,6 @@ sumry<- function (x, ...){
   if (x==2) type<- "regular season" else type<- "play off season"
   kable (apply(dta, 2, summary), format="html", digit =4, caption = paste0("Summary among all of the players"))
 }
-
 # Regular season summary
 sumry(2)
 ```
@@ -4649,14 +4642,13 @@ consistent in winnig rate than the lower number of games player.
 
 ``` r
 #scalter plot
-
 plot(golietable15$gamesPlayed, golietable15$wins/golietable15$gamesPlayed , col="blue",
      xlab="Games Played ",
      ylab = "Games won",
      main = "Games played vs win rate")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 The active players has larger width, which can be the effect of very
 lower number of players .
@@ -4667,7 +4659,7 @@ ggplot (golietable15, aes(x=gamesPlayed, y=wins, group=activePlayer)) + geom_poi
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](Proj1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ##### Box plot
 
@@ -4681,7 +4673,7 @@ bxPlot1<- ggplot(data= golietable15, aes(x=gamesPlayed, y= losses, group=activeP
 bxPlot1 + geom_boxplot() + labs(title="Boxplot of games played and losses by individual players") + geom_jitter(aes(color=activePlayer))
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ##### Bar plots
 
@@ -4694,7 +4686,7 @@ barPlot1<- ggplot(data=type2, aes(x=activePlayer))
 barPlot1 + geom_bar(aes(fill= activePlayer), position = "dodge") + labs(title = "Bar plot about active/inactive players")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ##### Histogram
 
@@ -4713,7 +4705,7 @@ histogram1 + geom_histogram(binwidth = 10, aes(fill= activePlayer)) + labs(title
   geom_density(adjust= 0.25, alpha=0.05)
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-20-1.png)<!-- --> The histogram
+![](pro1_files/figure-gfm/unnamed-chunk-20-1.png)<!-- --> The histogram
 looks extremly right skewed that the players playing higher number of
 games are lesser
 
@@ -4721,7 +4713,7 @@ games are lesser
 ggplot(golietable15, aes(x=gamesPlayed, ..density..)) + geom_histogram(bins=20) + ggtitle("Histogram for Games Played") + ylab("Density") + geom_density(col="red", lwd=2, adjust=2)
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-21-1.png)<!-- --> Again, the
+![](pro1_files/figure-gfm/unnamed-chunk-21-1.png)<!-- --> Again, the
 different color is contribution of two categorized playes as active or
 not.
 
@@ -4731,7 +4723,7 @@ histogram1<- ggplot(data=type3, aes(x=wins))
 histogram1 + geom_histogram(binwidth = 5, aes(y=..density.., fill= activePlayer )) + labs(title="Histogram for wins") +  geom_density(adjust= 0.3, alpha=0.05)
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 For the shake of try, the above histograms does not look preety well
 distributed data, so I tried below to see it on win rates, a calculated
@@ -4741,10 +4733,10 @@ variable. The win rate is left skewed.
 hist(wlRate$winRate, probability = T, col = "light blue", xlab = "Win Rate", main = "Histogram of Win Rate (wins/gameplayed)")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
 ggplot (wlRate, aes(x=winRate, ..density..)) + geom_histogram(bins=20) + facet_wrap(golietable15$activePlayer) + ggtitle("Histogram for Wins Rate with active player(True/False)") + ylab("Density") + geom_density(col="red", lwd=2, adjust=1)
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](pro1_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
