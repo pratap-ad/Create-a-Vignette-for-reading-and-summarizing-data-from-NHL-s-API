@@ -2,13 +2,16 @@
 title: "Project-1, ST558"
 author: "Pratap Adhikari"
 date: "9/18/2020"
-always_allow_html: true
-output: 
-  rmarkdown::github_document:
-    toc: yes
+output:
   html_document:
     toc: yes
-
+    toc_depth: 5
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+  rmarkdown::github_document:
+    toc: yes
+always_allow_html: yes
 ---
 
 ```{r setup, echo=F, warning=F, message=F}
@@ -19,7 +22,6 @@ library(tidyverse)
 library(dplyr)
 library(haven)
 library(ggplot2)
-#install.packages("qwraps2")
 library(qwraps2)
 library(rmarkdown)
 library(RSQLite)
