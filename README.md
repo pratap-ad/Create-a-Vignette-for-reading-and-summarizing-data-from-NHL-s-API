@@ -15,7 +15,7 @@ Pratap Adhikari
 ## Project1-ST558
 
 This project work involves creating a `vignette` for reading and
-summarizing data from the ~~National Hockey League’s~~ (NHL) **API**.
+summarizing data from the *National Hockey League’s* (NHL) **API**.
 
 ### List of library packages
 
@@ -409,8 +409,6 @@ Dallas Stars
 </tbody>
 
 </table>
-
-#### Contingency table
 
 ``` r
 # Max goals against one game

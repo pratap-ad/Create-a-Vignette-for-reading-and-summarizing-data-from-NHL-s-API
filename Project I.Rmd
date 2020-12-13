@@ -27,7 +27,7 @@ library(RSQLite)
 
 ## Project1-ST558
 
-This project work involves creating a `vignette` for reading and summarizing data from the ~~National Hockey League's~~ (NHL) **API**.
+This project work involves creating a `vignette` for reading and summarizing data from the *National Hockey League's* (NHL) **API**.
 
 
 ### List of library packages  
@@ -204,7 +204,7 @@ freqtbl
 add_header_above(header = c("Franchise" = 1, "Active Player" = 2),   kable(freqtbl))
 ```
 
-#### Contingency table
+
 ```{r}
 # Max goals against one game
 kable( table(golietable15 %>% group_by(mostGoalsAgainstOneGame) %>% select(mostGoalsAgainstOneGame, playerName)))
